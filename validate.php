@@ -11,6 +11,7 @@
 	http://msdn.microsoft.com/en-us/library/ff650303.aspx#paght000001_commonregularexpressions
 
 ***********************************/
+
 class validate {
 
 	private static $version = '1.0.0';
