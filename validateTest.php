@@ -1,7 +1,9 @@
 <?php
+/*
+ Command to run unit tests: 'phpunit filename.php'
+*/
 
-require_once '../settings.php';
-//require_once '../validate.php';
+require_once './validate.php';
 
 use validate as v;
 
