@@ -150,6 +150,10 @@ class validate {
 		return self::text($s);
 	}
 
+	public static function city($s){
+		return self::text($s);
+	}	
+
 	/***************
 	  Date/time related
 	***************/

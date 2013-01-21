@@ -73,12 +73,23 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		//false
 	}
 
+	public function test_city(){
+		//true
+		$this->assertTrue(v::city(''), 'not required');
+		$this->assertTrue(v::city('Austin'), 'single word city');
+		$this->assertTrue(v::city('Rolling Wood'), 'two word city');
+
+		//false
+
+	}
+
 	public function test_date(){
 
 		//true
 		$this->assertTrue(v::date(''), 'not required');
 		$this->assertTrue(v::date('', 'Y-m-d'), 'not required');
 		$this->assertTrue(v::date('1968-01-01', 'Y-m-d'), 'normal date');
+		$this->assertTrue(v::date('Jan 23, 1998'), 'textual date');
 
 		//false
 		$this->assertFalse(v::date('1968-01-', 'Y-m-d'), 'partial format');

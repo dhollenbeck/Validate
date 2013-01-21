@@ -1,7 +1,7 @@
 Validate
 ========
 
-PHP Validation class - validate user inputs.
+PHP Validation class - dead simple validation of user inputs.
 
 ## General Usage ##
 ```php
@@ -19,15 +19,30 @@ Base validation methods
 ```
 ## API ##
 
-###Geo Validation###
-
-Two letter state abbreviations.
+###Address Validation###
 ```php
-validate::state('TX')
+validate::street('123 main street')	//street address
+validate::city('Austin')			//city
+validate::state('TX')				//state
+validate::zip('56754')				//zip code 5 or 9 digit
 ```
-Street addresses can include 
+
+###Date Time Validation###
 ```php
-validate::street('TX')
+
+//see date format for options
+validate::date('2012-10-10', 'Y-m-d')	//ISO date
+validate::date('Jan 23, 2012')			//free format date
+validate::date('January', 'F')			//textual month
+validate::date('12', 'm')				//numeric month
+validate::date('2003', 'Y')				//year
+validate::date('31', 'd')				//day of month
+validate::date('Mon', 'D')				//day of week
+
+validate::timestamp('2010-10-10 14:00:00')	//timestamp
+
+validate::after('2010-01-02', 'Jan 3rd, 2010')	//comparison after
+validate::before('2010-01-02', 'Jan 1st, 2010') //comparison before
 ```
 
 
