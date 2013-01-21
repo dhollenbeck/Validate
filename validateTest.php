@@ -4,9 +4,7 @@
 */
 
 require_once './validate.php';
-
 use validate as v;
-
 
 class validationTest extends PHPUnit_Framework_TestCase {
 
@@ -452,25 +450,34 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(v::key('abc'), 'letters');
 	}
 
-	public function test_phone_weak(){
+	public function test_phone(){
 
-		//true weak
-		$this->assertTrue(v::phone('', 'weak'), 'not required');
-		$this->assertTrue(v::phone('8001231234', 'weak'), '800 number');
+		//true
+		$this->assertTrue(v::phone('', '(###)-###-####'), 'not required');
+		$this->assertTrue(v::phone('800-123-1234', '800-###-####'), '800 number');
 
-		//false weak
-		$this->assertFalse(v::phone('1231234', 'weak'), 'too short');
-		$this->assertFalse(v::phone('51212312341', 'weak'), 'too long');
+		//false
+		$this->assertFalse(v::phone('1231234', '(###)-###-####'), 'too short and wrong format');
+		$this->assertFalse(v::phone('51212312341', '(###)-###-####'), 'too long and wrong format');
 	}
 
-	public function test_phone_literal(){
-		//true literal
-		$this->assertTrue(v::phone('1-512-373-1234'), '512 number');
-		$this->assertTrue(v::phone('512-373-1234'), '512 number');
+	public function test_lexicon(){
+		//true
+		$this->assertTrue(v::lexicon('', ''), 'not required');
+		$this->assertTrue(v::lexicon('abc', 'abc'), 'exact match');
+		$this->assertTrue(v::lexicon('1', '#'), 'single digit string');
 
-		//false literal
-		$this->assertFalse(v::phone('800-555-0199'), 'reserved number');
+		$this->assertTrue(v::lexicon('a', '?'), 'single letter');
+		$this->assertTrue(v::lexicon('a', '*'), 'single wildcard letter');
+		$this->assertTrue(v::lexicon('1', '*'), 'single wildcard digit');
+
+		//false
+		$this->assertFalse(v::equal('a', 'b'), 'not equal');
+		$this->assertFalse(v::equal('a', '#'), 'a letter is not numeric');
+		$this->assertFalse(v::lexicon(1, '#'), 'single digit int');
+		$this->assertFalse(v::lexicon(12, '#'), 'double digit int');
 	}
+
 
 	public function test_equal(){
 

@@ -97,7 +97,7 @@ class validate {
 			case 'max':				return self::max($i, $opts);
 			case 'min':				return self::min($i, $opts);
 			case 'phone':			return self::phone($i, $opts);
-			case 'phoneweak':		return self::phoneweak($i);
+			//case 'phoneweak':		return self::phoneweak($i);
 			case 'in':				return self::in($i,$opts);
 			case 'equal':			return self::equal($i, $opts);
 		}
@@ -193,6 +193,21 @@ class validate {
 	/*****************
 	  String related
 	*****************/
+
+	public static function letters($str, $length){
+		if(!self::required($str)) return true;
+		$pattern = '^[a-zA-Z]{'.$length.'}$';
+		return self::regex($str, $pattern);
+	}
+
+	public static function digits($str, $length){
+		if(!self::required($str)) return true;
+				
+		$pattern = '^[0-9]{'.$length.'}$';
+		return self::regex($str, $pattern);
+	}
+
+
 	public static function length($str, $opts){
 		if(!self::required($str)) return true;
 		if(!is_string($str)) return false;
@@ -381,31 +396,61 @@ class validate {
 		return self::regex($num, $pattern);
 	}
 
+	public static function lexicon($input, $format){
+		if(!is_string($input)) return false;
+		if(!self::required($input)) return true;
+		
+		//must be same length
+		if(strlen($input) !== strlen($format)) return false;
+
+		$characters1 = str_split($input);
+		$characters2 = str_split($format);
+
+		//compare all characters
+		foreach($characters2 as $key=>$target){
+			$test = $characters1[$key];
+
+			switch($target){
+				case '#': 
+					if(!self::digits($test, 1)) return false;	
+					break;
+				case '?': 
+					if(!self::letters($test, 1)) return false; 
+					break;
+				case '*': 
+					if(!(self::letters($test, 1) OR self::digits($test,1))) return false; 
+					break;
+				default: if($target !== $test) return false;
+			}
+
+		}
+		return true;
+	}
 	/************************
 	  phone related
 	************************/
-	public static function phone($phone, $type = 'literal'){
+	public static function phone($phone, $format = '(###) ###-####'){
 		if(!self::required($phone)) return true;
 
-		switch($type){
-			case 'weak':	return self::phoneWeak($phone);
-			case '10digit': return self::phoneWeak($phone);
-			case 'literal': return self::phoneLiteral($phone);
-			default: return false;
-		}
+		return self::lexicon($phone, $format);
 	}
 
+
+	/*
 	private static function phoneLiteral($phone){
 		require_once 'BlogChuck/phones.php';
 		return BlogChuck\Phones::validate($phone) ? true : false;
 	}
+	*/
 
+	/*
 	private static function phoneWeak($phone){
 		if(!self::required($phone)) return true;
 		$pattern = "^[0-9]{10}$"; // 10 digits
 		//$pattern = "^([1]-)?[0-9]{3}-[0-9]{3}-[0-9]{4}$";
 		return self::regex($phone, $pattern);
 	}
+	*/
 
 	/******************
 	 equality related
