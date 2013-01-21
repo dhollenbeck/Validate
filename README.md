@@ -3,7 +3,7 @@ Validate
 
 PHP Validation class - dead simple validation of user inputs. Unit tests included.
 
-## General Usage ##
+## Usage ##
 ```php
 require_once '/path/to/validate.php';
 $input = $_GET['field1'];
