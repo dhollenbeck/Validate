@@ -17,9 +17,6 @@ if(!validate::positive($input)) throw new Exception('Input must be positive!');
 if(!validate::is('required,integer,positive', $input)) throw new Exception('Invalide input!');
 
 ```
-
-## API ##
-
 ### Address Validation ###
 ```php
 validate::street('123 main street')	//street address
@@ -66,7 +63,7 @@ validate::lexicon('Some phrase: 123', 'Some phrase: ###')
 
 ```
 
-### Identify Validation ###
+### Person/Account Validation ###
 ```php
 validate::name('Dan Hollenbeck')					//name
 validate::email('dan@hollenbecks.com')				//email
@@ -92,6 +89,7 @@ validate::max(1, 2)						//max allowed value
 
 
 ## Similar Projects ##
+https://github.com/Respect/Validation
 
 
 ## Legal (MIT License) ##
