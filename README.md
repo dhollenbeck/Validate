@@ -39,8 +39,8 @@ validate::date('Mon', 'D')				//day of week
 
 validate::timestamp('2010-10-10 14:00:00')	//timestamp
 
-validate::after('2010-01-02', 'Jan 3rd, 2010')	//comparison after
-validate::before('2010-01-02', 'Jan 1st, 2010') //comparison before
+validate::after('2010-01-02', '-100 years')	//comparison after
+validate::before('2010-01-02', 'now') //comparison before
 ```
 
 ### String Validation ###
