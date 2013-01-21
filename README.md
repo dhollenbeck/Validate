@@ -1,19 +1,19 @@
 Validate
 ========
 
-PHP Validation class - dead simple validation of user inputs.
+PHP Validation class - dead simple validation of user inputs. Unit tests included.
 
 ## General Usage ##
 ```php
 require_once '/path/to/validate.php';
 $input = $_GET['field1'];
 
-//you validate on individual rules
+//validate on individual rules
 if(!validate::required($input)) throw new Exception('Missing required input!');
 if(!validate::integer($input)) throw new Exception('Input must be an interger!');
 if(!validate::positive($input)) throw new Exception('Input must be positive!');
 
-//or validate by combination
+//or, validate by combination of rules
 if(!validate::is('required,integer,positive', $input)) throw new Exception('Invalide input!');
 
 ```
@@ -22,13 +22,13 @@ if(!validate::is('required,integer,positive', $input)) throw new Exception('Inva
 validate::street('123 main street')	//street address
 validate::city('Austin')			//city
 validate::state('TX')				//state
-validate::zip('56754')				//zip code 5 or 9 digit
+validate::zip('78733')				//zip code 5 or 9 digit
 ```
 
 ### Date/Time Validation ###
 ```php
 
-//see date format for options
+//see PHP date format for options
 validate::date('2012-10-10', 'Y-m-d')	//ISO date
 validate::date('Jan 23, 2012')			//free format date
 validate::date('January', 'F')			//textual month
@@ -68,7 +68,7 @@ validate::lexicon('Some phrase: 123', 'Some phrase: ###')
 validate::name('Dan Hollenbeck')					//name
 validate::email('dan@hollenbecks.com')				//email
 validate::username('my secret username 123')		//username
-validate::paddword('134#$$#ABC')					//password strength
+validate::password('134#$$#ABC')					//password strength
 validate::phone('512-555-1234', '###-###-####')		//phone with strick format
 validate::phone('(512) 555-5555', '(###) ###-####') //phone with strick format
 ```

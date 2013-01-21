@@ -510,5 +510,16 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(v::notequal('x', 'x'), 'not equal');
 
 	}
+
+	public function test_is(){
+		//true
+		$this->assertTrue(v::is('required, integer', '123'), 'required integer');
+		$this->assertTrue(v::is('integer, positive', '123'), 'non-required positive integer');
+		$this->assertTrue(v::is('integer, positive', ''), 'non-existent non-required positive integer');
+
+		//false
+		$this->assertFalse(v::is('required, integer', ''), 'required integer');
+		$this->assertFalse(v::is('float', 'a'), 'required float');
+	}
 }
 ?>

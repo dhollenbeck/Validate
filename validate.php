@@ -92,34 +92,58 @@ class validate {
 		'WY' => 'Wyoming'
     );
 
-	public static function is($what, $i, $opts = null){
+	public static function is($what, $input, $opts = null){
 		$what = strtolower($what);
-		switch($what){
-			case 'required':		return self::required($i);
-			case 'state':			return self::state($i);
-			case 'date':			return self::date($i, $opts);
-			case 'after':			return self::after($i, $opts);
-			case 'before':			return self::before($i, $opts);
-			case 'time':			return self::time($i);
-			case 'length':			return self::length($i, $opts);
-			case 'name':			return self::name($i);
-			case 'text':			return self::text($i);
-			case 'email':			return self::email($i);  
-			case 'alpha':			return self::alpha($i);
-			case 'alphanumeric':	return self::alphanumeric($i);
-			case 'integer':			return self::integer($i);
-			case 'numeric':			return self::numeric($i);
-			case 'positive':		return self::positive($i);
-			case 'negative':		return self::negative($i);
-			case 'lessthan':		return self::lessthan($i, $opts);
-			case 'greaterthan':		return self::greaterthan($i, $opts);
-			case 'lessthanequal':	return self::max($i, $opts);
-			case 'greaterthanequal':return self::min($i, $opts);
-			case 'max':				return self::max($i, $opts);
-			case 'min':				return self::min($i, $opts);
-			case 'phone':			return self::phone($i, $opts);
-			case 'in':				return self::in($i,$opts);
-			case 'equal':			return self::equal($i, $opts);
+
+		//check for combined
+		$validates = explode(',', $what);
+
+		if(sizeof($validates) === 1){
+			switch($what){
+				case 'required':		return self::required($input);
+				
+				case 'length':			return self::length($input, $opts);
+				case 'name':			return self::name($input);
+				case 'text':			return self::text($input);
+				case 'email':			return self::email($input);  
+				case 'alpha':			return self::alpha($input);
+				case 'alphanumeric':	return self::alphanumeric($input);
+				case 'integer':			return self::integer($input);
+				case 'float':			return self::float($input);
+
+				case 'numeric':			return self::numeric($input);
+				case 'positive':		return self::positive($input);
+				case 'negative':		return self::negative($input);
+				case 'lessthan':		return self::lessthan($input, $opts);
+				case 'greaterthan':		return self::greaterthan($input, $opts);
+				case 'lessthanequal':	return self::max($input, $opts);
+				case 'greaterthanequal':return self::min($input, $opts);
+				case 'max':				return self::max($input, $opts);
+				case 'min':				return self::min($input, $opts);
+				case 'phone':			return self::phone($input, $opts);
+				case 'in':				return self::in($input,$opts);
+				case 'equal':			return self::equal($input, $opts);
+
+				//address
+				case 'address':			return self::address($input);
+				case 'state':			return self::state($input);
+				case 'city':			return self::city($input);
+				case 'zip':				return self::zip($input);
+
+				//date-time
+				case 'date':			return self::date($input, $opts);
+				case 'timestamp':		return self::timestamp($input);
+				case 'after':			return self::after($input, $opts);
+				case 'before':			return self::before($input, $opts);
+
+				default: throw new Exception("Undefined validation rule.");
+			}
+		} else {
+			foreach($validates as $validate){
+				$validate = trim($validate);
+				if(!self::$validate($input)) return false;
+			}
+			return true;
 		}
 
 	}
