@@ -10,11 +10,11 @@ $input = $_GET['field1'];
 
 //validate on individual rules
 if(!validate::required($input)) throw new Exception('Missing required input!');
-if(!validate::integer($input)) throw new Exception('Input must be an interger!');
+if(!validate::integer($input)) throw new Exception('Input must be an integer!');
 if(!validate::positive($input)) throw new Exception('Input must be positive!');
 
 //or, validate by combination of rules
-if(!validate::is('required,integer,positive', $input)) throw new Exception('Invalide input!');
+if(!validate::is('required,integer,positive', $input)) throw new Exception('Input must be a positive integer!');
 
 ```
 ### Address Validation ###
