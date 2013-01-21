@@ -20,7 +20,7 @@ if(!validate::is('required,integer,positive', $input)) throw new Exception('Inva
 
 ## API ##
 
-###Address Validation###
+### Address Validation ###
 ```php
 validate::street('123 main street')	//street address
 validate::city('Austin')			//city
@@ -28,7 +28,7 @@ validate::state('TX')				//state
 validate::zip('56754')				//zip code 5 or 9 digit
 ```
 
-###Date Time Validation###
+### Date/Time Validation ###
 ```php
 
 //see date format for options
@@ -46,13 +46,55 @@ validate::after('2010-01-02', 'Jan 3rd, 2010')	//comparison after
 validate::before('2010-01-02', 'Jan 1st, 2010') //comparison before
 ```
 
+### String Validation ###
+```php
+//letters and digits
+validate::alpha('abcABC')				//letters
+validate::alphanumeric('abc123')		//letters and numbers
+validate::letters('abc', 3)				//letters and fixed length
+validate::digits('123', 3)				//digits and fixed length
 
+//length
+validate::length('Some string', 11)							//fixed length
+validate::length('some string', array('min'=>5, 'max'=>15))	//varible length
+
+validate::nopadding('some string')							//no whitespace allowed
+validate::text('some string')								//text input like a comment
+
+//lexicon (#=digit, ?=letter, *=either)
+validate::lexicon('Some phrase: 123', 'Some phrase: ###')
+
+```
+
+### Identify Validation ###
+```php
+validate::name('Dan Hollenbeck')					//name
+validate::email('dan@hollenbecks.com')				//email
+validate::username('my secret username 123')		//username
+validate::paddword('134#$$#ABC')					//password strength
+validate::phone('512-555-1234', '###-###-####')		//phone with strick format
+validate::phone('(512) 555-5555', '(###) ###-####') //phone with strick format
+```
+
+### Numeric Validation ###
+```php
+validate::integer('123')			//integer
+validate::float('1.2')				//float
+validate::positive('1.2')			//positive
+validate::negative('-1.2')			//negative
+validate::lessthan('1.0', '2.0')	//less than
+validate::lessthanequal(1, 2)		//less than equal
+validate::greaterthan('2', '1')			//greather than
+validate::greaterthanequal('2', '2')	//greater than equal
+validate::min(1, 0)						//min allowed value
+validate::max(1, 2)						//max allowed value
+```
 
 
 ## Similar Projects ##
 
 
-## Legal (MIT License)
+## Legal (MIT License) ##
 
 Copyright (c) 2013 Dan Hollenbeck
 
@@ -60,4 +102,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.```php
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
