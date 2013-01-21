@@ -97,7 +97,6 @@ class validate {
 			case 'max':				return self::max($i, $opts);
 			case 'min':				return self::min($i, $opts);
 			case 'phone':			return self::phone($i, $opts);
-			//case 'phoneweak':		return self::phoneweak($i);
 			case 'in':				return self::in($i,$opts);
 			case 'equal':			return self::equal($i, $opts);
 		}
@@ -434,23 +433,6 @@ class validate {
 
 		return self::lexicon($phone, $format);
 	}
-
-
-	/*
-	private static function phoneLiteral($phone){
-		require_once 'BlogChuck/phones.php';
-		return BlogChuck\Phones::validate($phone) ? true : false;
-	}
-	*/
-
-	/*
-	private static function phoneWeak($phone){
-		if(!self::required($phone)) return true;
-		$pattern = "^[0-9]{10}$"; // 10 digits
-		//$pattern = "^([1]-)?[0-9]{3}-[0-9]{3}-[0-9]{4}$";
-		return self::regex($phone, $pattern);
-	}
-	*/
 
 	/******************
 	 equality related
