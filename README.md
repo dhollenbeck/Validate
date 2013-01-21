@@ -5,18 +5,19 @@ PHP Validation class - dead simple validation of user inputs.
 
 ## General Usage ##
 ```php
-
 require_once '/path/to/validate.php';
-
 $input = $_GET['field1'];
+
+//you validate on individual rules
 if(!validate::required($input)) throw new Exception('Missing required input!');
 if(!validate::integer($input)) throw new Exception('Input must be an interger!');
 if(!validate::positive($input)) throw new Exception('Input must be positive!');
+
+//or validate by combination
+if(!validate::is('required,integer,positive', $input)) throw new Exception('Invalide input!');
+
 ```
 
-Base validation methods
-```php
-```
 ## API ##
 
 ###Address Validation###
