@@ -103,10 +103,18 @@ class validate {
 
 	}
 
+	/**
+	 * Version Number
+	 */
 	public static function version(){
 		return self::$version;
 	}
-	
+
+	/**
+	 * The input is required. All other validation methods will return if
+	 * the input is missing, which allows the validation methods to support
+	 * optional inputs.
+	 */
 	public static function required($data){
 		if(is_null($data)) return false;
 		if(is_array($data) AND empty($data)) return false;
@@ -138,7 +146,7 @@ class validate {
 		return self::regex($s, $pattern);
 	}
 
-	public static function address($s){
+	public static function street($s){
 		return self::text($s);
 	}
 

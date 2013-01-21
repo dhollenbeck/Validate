@@ -1,8 +1,9 @@
 Validate
 ========
 
-PHP Validation class
-## Usage ##
+PHP Validation class - validate user inputs.
+
+## General Usage ##
 ```php
 
 require_once '/path/to/validate.php';
@@ -16,14 +17,21 @@ if(!validate::positive($input)) throw new Exception('Input must be positive!');
 Base validation methods
 ```php
 ```
+## API ##
 
-Geo related validation methods
+###Geo Validation###
+
+Two letter state abbreviations.
 ```php
-
-validate::state('TX') 					//state abbreviation
-validate::zip('54256') 					//zip code
-validate::address('123 main street') 	//street address
+validate::state('TX')
 ```
+Street addresses can include 
+```php
+validate::street('TX')
+```
+
+
+
 
 ## Similar Projects ##
 

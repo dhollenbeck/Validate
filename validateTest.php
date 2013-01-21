@@ -65,10 +65,10 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(v::zip('12345-12345'), 'too long 5-4 zip');
 	}
 
-	public function test_address(){
+	public function test_street(){
 		//true
-		$this->assertTrue(v::address(''), 'not required');
-		$this->assertTrue(v::address('123 main street'), 'not required');
+		$this->assertTrue(v::street(''), 'not required');
+		$this->assertTrue(v::street('123 main street'), 'not required');
 
 		//false
 	}
