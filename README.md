@@ -160,7 +160,7 @@ if(!v::expires($expires)) throw new Exception('Invalid expiration year and month
 if(!v::required($cvv)) throw new Exception('You must enter the code on the back of your card.');
 if(!v::cvv($cvv) throw new Exception('Invalid CVV number.');
 
-//validate amount
+//validate amount (you really should get this from your database...)
 if(!v::required($amt)) throw new Exeption('Missing dollar amount.');
 if(!v::dollars($amt)) throw new Exception('Invalid dollar amount.');
 if(!v::positive($amt)) throw new Exception('Nice try.');
