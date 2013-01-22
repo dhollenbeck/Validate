@@ -87,9 +87,22 @@ validate::min(1, 0)						//min allowed value
 validate::max(1, 2)						//max allowed value
 ```
 
+### Transaction Validation ###
+```php
+validate::cvv('123');					//credit card cvv
+validate::billname('Dan Hollenbeck');	//name on account
+validate::creditcard('');				//uses luhn alogrithm
+validate::creditcard('', 'VISA')		//uses luhn alogrithm and issuer detection
+validate::dollars('123.00');			//dollar amount
+validate::cents('12300');				//cents amount
+validate::check('1234567-575757')		//checking account number
+```
+
+
 
 ## Similar Projects ##
 https://github.com/Respect/Validation
+
 
 
 ## Legal (MIT License) ##

@@ -136,6 +136,9 @@ class validate {
 				case 'after':			return self::after($input, $opts);
 				case 'before':			return self::before($input, $opts);
 
+				//transactions
+
+
 				default: throw new Exception("Undefined validation rule.");
 			}
 		} else {
@@ -502,6 +505,124 @@ class validate {
 	public static function notequal($val1, $val2){
 		if(!self::required($val1)) return true;
 		return ($val1 !== $val2)? true : false;
+	}
+
+	/*******************
+	 transaction related
+	*******************/
+	public static function cvv($cvv){
+		if(!self::required($cvv)) return true;
+		if(!self::digits($cvv)) return false;
+		if(!self::length($cvv, array('min'=>3, 'max'=>4))) return false;
+		return true;
+	}
+
+	public static function expiration($expires){
+		if(!self::required($expires)) return true;
+		if(!self::date($expires, 'Y-m')) return false;
+		if(!self::before($expires, 'now')) return false;
+		if(!self::after($expires, '+15 years')) return false;
+		return true;
+	}
+
+	public static function dollars($amt){
+		if(!self::required($amt)) return true;
+		if(!self::float($amt)) return false;
+		return true;
+	}
+
+	public static function cents($amt){
+		if(!self::required($amt)) return true;
+		if(!self::integer($amt)) return false;
+		return true;
+	}
+
+	public static function creditcard($number, $format=null){
+		if(!self::required($number)) return true;
+		//if(!is_null($format)){
+			if(!self::lexicon($number, $format)) return false;
+		//}
+		if(!self::length($number, array('min' => 14, 'max' => 16))) return false;
+		if(!self::luhn($number)) return false;
+		return true;
+	}
+
+	public static function check_account($num){
+		if(!self::required($num)) return true;
+		if(!self::digits($num)) return false;
+		if(!self::length($num, array('min'=>3, 'max'=>4))) return false; //todo: check number range
+	}
+
+	public static function check_routing($num){
+		if(!self::required($num)) return true;
+		if(!self::digits($num)) return false;
+		if(!self::length($num, array('min'=>3, 'max'=>4))) return false; //todo: check number range
+	}
+
+	public static function check(){
+		return false;
+	}
+	/**
+	 * Issuer of credit card.
+	 * @link http://en.wikipedia.org/wiki/Bank_card_number
+	 * @link http://www.pixelenvision.com/2314/php-credit-card-validation-class-using-mod-10-luhn-more/
+	 */
+	public static function issuer($cc){
+		
+		//mastercard: 14 chars, starts with 51-55
+		if (ereg('^5[1-5][0-9]{14}$', $cc)) return 'MASTERCARD';
+
+		//visa: 
+		if (ereg('^4[0-9]{12}([0-9]{3})?$', $cc)) return 'VISA';
+		if (ereg('^3[47][0-9]{13}$', $cc)) return 'AMEX';
+		if (ereg('^3(0[0-5]|[68][0-9])[0-9]{11}$', $cc)) return 'DINNERS';
+		if (ereg('^6011[0-9]{12}$', $cc)) return 'DISCOVER';
+		if (ereg('^(3[0-9]{4}|2131|1800)[0-9]{11}$', $cc)) return 'JCB';
+		if (ereg('^(5[06-8]|6)[0-9]{10,17}$', $cc)) return 'MAESTRO';
+		return 'UNKNOWN';
+	}
+
+	/**
+	 * Luhn Alhorithm
+	 * @link http://en.wikipedia.org/wiki/Luhn_algorithm
+	 *
+	 * Methodology:
+	 * 1. Double every even (from the right) digit.
+	 * 2. Split doubling if greater than 9.
+	 * 3. Sum digits.
+	 * 4. Valid if sum module 10 equals zero.
+	 */
+	public static function luhn($cc){
+
+		//remove formating characters
+		$cc = ereg_replace('[^0-9]', '', $cc); 
+
+		//number of digits parity
+		$parity = strlen($cc) % 2; //0=even, 1=odd
+		$sum = 0;
+		
+		//array of digits
+	  	$digits = str_split($cc);
+
+	  	foreach($digits as $key => $digit) {
+
+			//double every even (from the right) digit
+		  	if (($key % 2) == $parity) $digit *= 2;
+
+			//split double digits
+		  	if ($digit > 9) {
+			  	$parts = str_split($digit); //split
+			  	$digit = $parts[0] + $parts[1]; //sum together
+		  	}
+
+			//sum total
+			$sum += $digit;
+	  	}
+
+	  	//valid if sum mod 10 equals zero
+		$valid = ($sum % 10 == 0)? true : false;
+
+		return $valid;
 	}
 }
 ?>
