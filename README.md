@@ -162,7 +162,7 @@ if(!v::cvv($cvv) throw new Exception('Invalid CVV number.');
 
 //validate amount
 if(!v::required($amt)) throw new Exeption('Missing dollar amount.');
-if(!v::dollar($amt)) throw new Exception('Invalid dollar amount.');
+if(!v::dollars($amt)) throw new Exception('Invalid dollar amount.');
 if(!v::positive($amt)) throw new Exception('Nice try.');
 
 //submit transaction to your payment gateway here
