@@ -3,20 +3,20 @@
 
 Copyright (c) 2013 Dan Hollenbeck
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-software and associated documentation files (the "Software"), to deal in the Software 
-without restriction, including without limitation the rights to use, copy, modify, merge, 
-publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to
 whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies 
+The above copyright notice and this permission notice shall be included in all copies
 or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
@@ -37,7 +37,7 @@ SOFTWARE.
 class validate {
 
 	private static $version = '1.0.0';
-	
+
 	public static $states = array(
 		'AL' => 'Alabama',
 		'AK' => 'Alaska',
@@ -101,11 +101,11 @@ class validate {
 		if(sizeof($validates) === 1){
 			switch($what){
 				case 'required':		return self::required($input);
-				
+
 				case 'length':			return self::length($input, $opts);
 				case 'name':			return self::name($input);
 				case 'text':			return self::text($input);
-				case 'email':			return self::email($input);  
+				case 'email':			return self::email($input);
 				case 'alpha':			return self::alpha($input);
 				case 'alphanumeric':	return self::alphanumeric($input);
 				case 'integer':			return self::integer($input);
@@ -200,7 +200,7 @@ class validate {
 
 	public static function city($s){
 		return self::text($s);
-	}	
+	}
 
 	/***************
 	  Date/time related
@@ -252,21 +252,6 @@ class validate {
 	/*****************
 	  String related
 	*****************/
-
-	public static function letters($str, $length){
-		if(!self::required($str)) return true;
-		$pattern = '^[a-zA-Z]{'.$length.'}$';
-		return self::regex($str, $pattern);
-	}
-
-	public static function digits($str, $length){
-		if(!self::required($str)) return true;
-				
-		$pattern = '^[0-9]{'.$length.'}$';
-		return self::regex($str, $pattern);
-	}
-
-
 	public static function length($str, $opts){
 		if(!self::required($str)) return true;
 		if(!is_string($str)) return false;
@@ -280,7 +265,7 @@ class validate {
 		} else if(isset($opts['max'])){
 			return ($opts['max'] >= $len)? true : false;
 		}
-		
+
 		//use numeric or numeric string
 		if(is_numeric($opts)){
 			return ($opts == $len)? true : false;
@@ -293,32 +278,49 @@ class validate {
 		if(!self::required($s)) return true; //all validations are optional
 
 		//leading or trailing whitespace?
-		return ($s == trim($s))? true : false; 
+		return ($s == trim($s))? true : false;
 	}
 
 	public static function text($str){
 		if(!is_string($str)) return false;
-		if(!self::required($str)) return true; //all validations are optional
+		if(!self::required($str)) return true;
 
 		$pattern = "^[-a-z0-9' \/#.,()!?@;:_\"*+=$]*$";
 		return self::regex($str, $pattern);
 	}
 
+	/**
+	 * Alpha or letters only
+	 * Options:
+	 * cytype_alpha($str)
+	 * preg_match('/^[a-zA-Z]{1,}$/', $str)
+	 */
 	public static function alpha($str){
 		if(!is_string($str)) return false;
-		if(!self::required($str)) return true; //all validations are optional
-
-		$pattern = '^[a-z]*$';
-		return self::regex($str, $pattern);
+		if(!self::required($str)) return true;
+		return ctype_alpha($str);
 	}
 	public static function alphanumeric($str){
 		if(!is_string($str)) return false;
-		if(!self::required($str)) return true; //all validations are optional
-
-		$pattern = '^[a-z0-9]*$';
-		return self::regex($str, $pattern);
+		if(!self::required($str)) return true;
+		return ctype_alnum($str);
 	}
 
+	public static function letters($str){
+		return self::alpha($str);
+	}
+
+	/**
+	 * Digits only
+	 * Options:
+	 * preg_match('/^[0-9]{1,}$/', $str)
+	 * preg_match('/^\d+$/', $str)
+	 * ctype_digit($str)
+	 */
+	public static function digits($str){
+		if(!self::required($str)) return true;
+		return ctype_digit($str);
+	}
 
 	/***************
 	 idenity related
@@ -331,7 +333,7 @@ class validate {
 		$pattern = "^[-a-z' .]{1,}$"; // only hypens, letters, apostrophes, spaces, periods
 		return self::regex($str, $pattern);
 	}
-	
+
 	public static function email($str){
 		if(!is_string($str)) return false;
 		if(!self::required($str)) return true; //all validations are optional
@@ -356,11 +358,11 @@ class validate {
 
 		//require greater than 6 characters
 		if(!self::length($str, array('min'=>6, 'max'=>50))) return false;
-		
+
 		//require atleast one case insensitive letter
 		$pattern = '^.*[a-z]+.*$';
 		if(!self::regex($str, $pattern)) return false;
-		
+
 		//require atlest one number
 		$pattern = '^.*[0-9]+.*$';
 		if(!self::regex($str, $pattern)) return false;
@@ -381,6 +383,7 @@ class validate {
 		if(!self::required($num)) return true;
 		if(!is_string($num)) return false;
 		if(!is_numeric($num)) return false;
+		if($num !== number_format($num, 0, '.', '')) return false;
 		return ((int)$num == $num)? true : false;
 	}
 	public static function float($num){
@@ -419,7 +422,7 @@ class validate {
 	}
 	public static function lessthanequal($num, $value){
 		if(!self::required($num)) return true;
-	
+
 		if(!is_numeric($num)) return false;
 		if(!is_numeric($value)) return false;
 
@@ -450,7 +453,7 @@ class validate {
 	}
 	public static function key($num){
 		if(!self::required($num)) return true;
-		
+
 		$pattern = '^[0-9]+$';
 		return self::regex($num, $pattern);
 	}
@@ -458,7 +461,7 @@ class validate {
 	public static function lexicon($input, $format){
 		if(!is_string($input)) return false;
 		if(!self::required($input)) return true;
-		
+
 		//must be same length
 		if(strlen($input) !== strlen($format)) return false;
 
@@ -470,14 +473,14 @@ class validate {
 			$test = $characters1[$key];
 
 			switch($target){
-				case '#': 
-					if(!self::digits($test, 1)) return false;	
+				case '#':
+					if(!self::digits($test)) return false;
 					break;
-				case '?': 
-					if(!self::letters($test, 1)) return false; 
+				case '?':
+					if(!self::letters($test)) return false;
 					break;
-				case '*': 
-					if(!(self::letters($test, 1) OR self::digits($test,1))) return false; 
+				case '*':
+					if(!(self::letters($test) OR self::digits($test))) return false;
 					break;
 				default: if($target !== $test) return false;
 			}
@@ -501,7 +504,7 @@ class validate {
 		if(!self::required($val1)) return true;
 		return ($val1 === $val2)? true : false;
 	}
-	
+
 	public static function notequal($val1, $val2){
 		if(!self::required($val1)) return true;
 		return ($val1 !== $val2)? true : false;
@@ -517,17 +520,18 @@ class validate {
 		return true;
 	}
 
-	public static function expiration($expires){
+	public static function expires($expires){
 		if(!self::required($expires)) return true;
 		if(!self::date($expires, 'Y-m')) return false;
-		if(!self::before($expires, 'now')) return false;
-		if(!self::after($expires, '+15 years')) return false;
+		if(!self::after($expires, 'now')) return false;
+		if(!self::before($expires, '+15 years')) return false;
 		return true;
 	}
 
 	public static function dollars($amt){
 		if(!self::required($amt)) return true;
 		if(!self::float($amt)) return false;
+		if($amt !== number_format($amt, 2, '.', '')) return false;
 		return true;
 	}
 
@@ -537,30 +541,71 @@ class validate {
 		return true;
 	}
 
-	public static function creditcard($number, $format=null){
+	public static function creditcard($number, $issuers=null){
 		if(!self::required($number)) return true;
-		//if(!is_null($format)){
-			if(!self::lexicon($number, $format)) return false;
-		//}
+
+		//remove space characters
+		$number = str_replace(' ', '', $number);
+
+		//validate card number
 		if(!self::length($number, array('min' => 14, 'max' => 16))) return false;
 		if(!self::luhn($number)) return false;
+
+		//validate issuer
+		if(!is_null($issuers)){
+			$issuer = self::issuer($number);
+			if(!is_array($issuers)){
+				$issuers = explode(',', $issuers);
+			}
+			$issuers = array_map('trim', $issuers);
+			$issuers = array_map('strtoupper', $issuers);
+			if(!in_array($issuer, $issuers)) return false;
+		}
+
 		return true;
 	}
 
-	public static function check_account($num){
+	/**
+	 * Bank routing number
+	 */
+	public static function bank_routing($num){
 		if(!self::required($num)) return true;
+		if(!self::length($num, 9)) return false;
 		if(!self::digits($num)) return false;
-		if(!self::length($num, array('min'=>3, 'max'=>4))) return false; //todo: check number range
+		return true;
 	}
 
-	public static function check_routing($num){
+	/**
+	 * Bank account number
+	 */
+	public static function bank_account($num){
 		if(!self::required($num)) return true;
+		if(!self::length($num, array('min' =>4, 'max' =>17))) return false;
 		if(!self::digits($num)) return false;
-		if(!self::length($num, array('min'=>3, 'max'=>4))) return false; //todo: check number range
+		return true;
 	}
 
-	public static function check(){
-		return false;
+	/**
+	 * Check number
+	 * Consists of bank routing and bank account numbers.
+	 * Check number must include a single seperator (space or dash)
+	 * character between the routing and account numbers.
+	 */
+	public static function check($num){
+
+		if(!self::required($num)) return true;
+
+		//split digits
+		$routing = substr($num, 0, 9);
+		$seperator = substr($num, 9, 1);
+		$account = substr($num, 10);
+
+		//validate
+		if(!self::bank_routing($routing)) return false;
+		if(!self::bank_account($account)) return false;
+		if($seperator !== ' ' AND $seperator !== '-') return false;
+
+		return true;
 	}
 	/**
 	 * Issuer of credit card.
@@ -568,18 +613,42 @@ class validate {
 	 * @link http://www.pixelenvision.com/2314/php-credit-card-validation-class-using-mod-10-luhn-more/
 	 */
 	public static function issuer($cc){
-		
-		//mastercard: 14 chars, starts with 51-55
-		if (ereg('^5[1-5][0-9]{14}$', $cc)) return 'MASTERCARD';
-
-		//visa: 
-		if (ereg('^4[0-9]{12}([0-9]{3})?$', $cc)) return 'VISA';
-		if (ereg('^3[47][0-9]{13}$', $cc)) return 'AMEX';
-		if (ereg('^3(0[0-5]|[68][0-9])[0-9]{11}$', $cc)) return 'DINNERS';
-		if (ereg('^6011[0-9]{12}$', $cc)) return 'DISCOVER';
-		if (ereg('^(3[0-9]{4}|2131|1800)[0-9]{11}$', $cc)) return 'JCB';
-		if (ereg('^(5[06-8]|6)[0-9]{10,17}$', $cc)) return 'MAESTRO';
+		if(self::mastercard($cc)) return 'MASTERCARD';
+		if(self::visa($cc)) return 'VISA';
+		if(self::amex($cc)) return 'AMEX';
+		if(self::dinners($cc)) return 'DINNERS';
+		if(self::discover($cc)) return 'DISCOVER';
+		if(self::jcb($cc)) return 'JCB';
+		if(self::maestro($cc)) return 'MAESTRO';
 		return 'UNKNOWN';
+	}
+
+	public static function mastercard($cc){
+		return (preg_match('/^5[1-5][0-9]{14}$/', $cc))? true : false;
+	}
+
+	public static function visa($cc){
+		return (preg_match('/^4[0-9]{12}([0-9]{3})?$/', $cc))? true : false;
+	}
+
+	public static function amex($cc){
+		return (preg_match('/^3[47][0-9]{13}$/', $cc))? true : false;
+	}
+
+	public static function dinners($cc){
+		return (preg_match('/^3(0[0-5]|[68][0-9])[0-9]{11}$/', $cc))? true : false;
+	}
+
+	public static function discover($cc){
+		return (preg_match('/^6011[0-9]{12}$/', $cc))? true : false;
+	}
+
+	public static function jcb($cc){
+		return (preg_match('/^(3[0-9]{4}|2131|1800)[0-9]{11}$/', $cc))? true : false;
+	}
+
+	public static function maestro($cc){
+		return (preg_match('/^(5[06-8]|6)[0-9]{10,17}$/', $cc))? true : false;
 	}
 
 	/**
@@ -594,13 +663,10 @@ class validate {
 	 */
 	public static function luhn($cc){
 
-		//remove formating characters
-		$cc = ereg_replace('[^0-9]', '', $cc); 
-
 		//number of digits parity
 		$parity = strlen($cc) % 2; //0=even, 1=odd
 		$sum = 0;
-		
+
 		//array of digits
 	  	$digits = str_split($cc);
 

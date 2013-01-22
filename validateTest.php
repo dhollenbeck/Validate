@@ -26,7 +26,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(v::required(0), 'zero numeric');
 		$this->assertTrue(v::required(1), 'positive numeric');
 		$this->assertTrue(v::required(0.1), 'small float numeric');
-		
+
 		//false
 		$this->assertFalse(v::required(''), 'empty string');
 		$this->assertFalse(v::required(null), 'null object');
@@ -100,7 +100,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_timestamp(){
-		
+
 		//true
 		$this->assertTrue(v::timestamp(''), 'not required');
 		$this->assertTrue(v::timestamp('0000-00-00 00:00:00'), 'zero timestamp not required');
@@ -141,20 +141,20 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		//true
 		$this->assertTrue(v::in('', array('TX')), 'not required');
 		$this->assertTrue(v::in('TX', array('TX')), 'in array');
-		
+
 		//false
 		$this->assertFalse(v::in('TXX', array('TX')), 'not in array');
 		$this->assertFalse(v::in('TX', 0), 'haystack not array');
 	}
 
 	public function test_length(){
-		
+
 		//true
 		$this->assertTrue(v::length('', 3), 'not required');
 		$this->assertTrue(v::length('abc', 3), 'fixed length');
 		$this->assertTrue(v::length('abc', array('min'=>2, 'max'=>3)), 'min and max length');
 		$this->assertTrue(v::length('abc', array('min'=>3, 'max'=>3)), 'min and max length');
-		
+
 		//false
 		$this->assertFalse(v::length('abc', 4), 'not fixed length');
 		$this->assertFalse(v::length('abc', array('min'=>4, 'max'=>5)), 'too short for min and max');
@@ -163,7 +163,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_nopadding(){
-		
+
 		//true
 		$this->assertTrue(v::nopadding(''), 'blank string is not required');
 		$this->assertTrue(v::nopadding('abc'), 'no whitespace string');
@@ -177,7 +177,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_text(){
-		
+
 		//true
 		$this->assertTrue(v::text(''), 'not required');
 		$this->assertTrue(v::text("abcdefghijklmnopqrstuvwxyz"), 'lower case letters');
@@ -203,7 +203,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_alpha(){
-		
+
 		//true
 		$this->assertTrue(v::alpha(''), 'not required');
 		$this->assertTrue(v::alpha("abcdefghijklmnopqrstuvwxyz"), 'lower case letters');
@@ -214,20 +214,20 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_alphanumeric(){
-		
+
 		//true
 		$this->assertTrue(v::alphanumeric(''), 'not required');
 		$this->assertTrue(v::alphanumeric("abcdefghijklmnopqrstuvwxyz"), 'lower case letters');
 		$this->assertTrue(v::alphanumeric("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 'upper case letters');
 		$this->assertTrue(v::alphanumeric("0123456789"), 'numbers');
-		
+
 		//false
 		$this->assertFalse(v::alphanumeric("$"), 'number');
-		
+
 	}
-	
+
 	public function test_name(){
-		
+
 		//true
 		$this->assertTrue(v::name(''), 'blank string is not required');
 		$this->assertTrue(v::name("dan hollenbeck"), 'space in name is allowed');
@@ -236,7 +236,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(v::name("Johnson-Smith"), 'hypen');
 		$this->assertTrue(v::name("O'reily"), 'single apostrophe');
 		$this->assertTrue(v::name("Mr. Hollenbeck"), 'period');
-		
+
 		//false
 		$this->assertFalse(v::name(' hollenbeck'), 'leading whitespace is not allowed');
 		$this->assertFalse(v::name(' hollenbeck'), 'trailing whitespace is not allowed');
@@ -309,10 +309,10 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		//true
 		$this->assertTrue(v::integer(''), 'not required');
 		$this->assertTrue(v::integer('0'), 'string zero');
-		$this->assertTrue(v::integer('01'), 'string zero one');
 		$this->assertTrue(v::integer('-1'), 'string neg one');
-		
+
 		//false
+		$this->assertFalse(v::integer('01'), 'string zero one');
 		$this->assertFalse(v::integer('abc'), 'letters');
 		$this->assertFalse(v::integer(0.1), 'float');
 		$this->assertFalse(v::integer('1.1'), 'float string');
@@ -322,7 +322,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_float(){
-		
+
 		//true
 		$this->assertTrue(v::float(''), 'not required');
 		$this->assertTrue(v::float('1.1'), 'float string');
@@ -342,7 +342,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_positive(){
-		
+
 		//true
 		$this->assertTrue(v::positive(''), 'not required');
 		$this->assertTrue(v::positive('1'), 'str int one');
@@ -449,7 +449,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_key(){
-		
+
 		//true
 		$this->assertTrue(v::key(''), 'not required');
 		$this->assertTrue(v::key('0'), 'zero');
@@ -517,9 +517,118 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(v::is('integer, positive', '123'), 'non-required positive integer');
 		$this->assertTrue(v::is('integer, positive', ''), 'non-existent non-required positive integer');
 
+		$this->assertTrue(v::is('required,dollars,positive', '1.00'), 'required positive dollar');
+
+
 		//false
 		$this->assertFalse(v::is('required, integer', ''), 'required integer');
 		$this->assertFalse(v::is('float', 'a'), 'required float');
+	}
+
+	/***********************************
+	Transaction related
+	***********************************/
+	public function test_cvv(){
+		//true
+		$this->assertTrue(v::cvv(''), 'not required');
+		$this->assertTrue(v::cvv('123'), '3 digits');
+		$this->assertTrue(v::cvv('1234'), '4 digits');
+
+		//false
+		$this->assertFalse(v::cvv('12'), '2 digits');
+		$this->assertFalse(v::cvv('12345'), '5 digits');
+		$this->assertFalse(v::cvv('abcd'), 'letters');
+		$this->assertFalse(v::cvv('....'), 'periods');
+	}
+	public function test_expires(){
+		//true
+		$this->assertTrue(v::expires(''), 'not required');
+		$this->assertTrue(v::expires('2014-10'), 'basic expiration');
+
+		//false
+		$this->assertFalse(v::expires('14-10'), 'two digit year');
+		$this->assertFalse(v::expires('2014'), 'four digit year only');
+	}
+	public function test_dollars(){
+		//true
+		$this->assertTrue(v::dollars(''), 'not required');
+		$this->assertTrue(v::dollars('20.00'), 'basic dollar');
+		$this->assertTrue(v::dollars('0.00'), 'zero dollar');
+		$this->assertTrue(v::dollars('-1.00'), 'negative dollar');
+
+		//false
+		$this->assertFalse(v::dollars('0'), 'zero');
+		$this->assertFalse(v::dollars('20'), 'missing decimal point');
+		$this->assertFalse(v::dollars('20.1'), 'missing one digit to right of point');
+	}
+	public function test_cents(){
+		//true
+		$this->assertTrue(v::cents(''), 'not required');
+		$this->assertTrue(v::cents('200'), 'two dollars x');
+
+		//false
+		$this->assertFalse(v::cents('2.00'), 'two dollars');
+	}
+	public function test_check(){
+		//true
+		$this->assertTrue(v::check(''), 'not required');
+		$this->assertTrue(v::check('123456789-12345678'), 'basic short check number with dash');
+		$this->assertTrue(v::check('123456789 12345678'), 'basic short check number with space');
+		$this->assertTrue(v::check('123456789-12345678901234567'), 'basic long check number');
+
+		//false
+		$this->assertFalse(v::check('123456789?12345678'), 'wrong formatting character');
+		$this->assertFalse(v::check('1234567-12345678'), 'too short routing number');
+		$this->assertFalse(v::check('1234567890-12345678901234567'), 'too long routing number');
+		$this->assertFalse(v::check('123456789-123456789012-1001'), 'check number');
+		$this->assertFalse(v::check('123456789 123456789012 1001'), 'check number');
+	}
+
+	public function test_bank_account(){
+		//true
+		$this->assertTrue(v::bank_account(''), 'not required');
+
+		//false
+	}
+
+	public function test_bank_routing(){
+		//true
+		$this->assertTrue(v::bank_routing(''), 'not required');
+
+		//false
+	}
+
+	public function test_creditcard(){
+		//true
+		$this->assertTrue(v::creditcard(''), 'not required');
+		$this->assertTrue(v::creditcard('4242 4242 4242 4242'), 'no issuers with spaces');
+		$this->assertTrue(v::creditcard('4242424242424242'), 'no issuers with no spaces');
+		$this->assertTrue(v::creditcard('4242 4242 4242 4242', 'visa'), 'visa string lowercase');
+		$this->assertTrue(v::creditcard('4242 4242 4242 4242', 'visa,mastercard'), 'visa and mastercard string lowercase');
+		$this->assertTrue(v::creditcard('4242 4242 4242 4242', 'VISA'), 'visa string uppercase');
+		$this->assertTrue(v::creditcard('4242 4242 4242 4242', array('visa', 'mastercard')), 'visa array lowercase');
+		$this->assertTrue(v::creditcard('4242 4242 4242 4242', array('VISA', 'mastercard')), 'visa array uppercase');
+
+		//false
+		$this->assertFalse(v::creditcard('4242424242424243'), 'bad luhn, no issuers with no spaces');
+		$this->assertFalse(v::creditcard('42424242424'), 'too short');
+		$this->assertFalse(v::creditcard('424242424242424O'), 'none digit');
+	}
+
+	public function test_issuer(){
+		//true
+		//$this->assertTrue(v::issuer(''), 'not required');
+
+		//false
+	}
+
+	public function test_luhn(){
+		//true
+		$this->assertTrue(v::luhn(''), 'not required');
+		$this->assertTrue(v::luhn('4242424242424242'), 'valid luhn');
+
+		//false
+		$this->assertFalse(v::luhn('4242424242424243'), 'invalid luhn');
 	}
 }
 ?>

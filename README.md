@@ -13,9 +13,9 @@ if(!validate::required($input)) throw new Exception('Missing required input!');
 if(!validate::integer($input)) throw new Exception('Input must be an integer!');
 if(!validate::positive($input)) throw new Exception('Input must be positive!');
 
-//or, validate by combination of rules
-if(!validate::is('required,integer,positive', $input)) throw new Exception('Input must be a positive integer!');
-
+//or, validate by combination
+if(!validate::is('required, integer, positive', $input)) throw new Exception('Input must be a positive integer!');
+if(!validate::is('required, dollars, positive', $input)) throw new Exception('Input must be a positive dollar amount!');
 ```
 ### Address Validation ###
 ```php
@@ -48,14 +48,14 @@ validate::before('2010-01-02', 'now') //comparison before
 //letters and digits
 validate::alpha('abcABC')				//letters
 validate::alphanumeric('abc123')		//letters and numbers
-validate::letters('abc', 3)				//letters and fixed length
-validate::digits('123', 3)				//digits and fixed length
+validate::letters('abc')				//letters and fixed length
+validate::digits('123')				//digits and fixed length
 
 //length
 validate::length('Some string', 11)							//fixed length
-validate::length('some string', array('min'=>5, 'max'=>15))	//varible length
+validate::length('some string', array('min'=>5, 'max'=>15))	//range length
 
-validate::nopadding('some string')							//no whitespace allowed
+//comments
 validate::text('some string')								//text input like a comment
 
 //lexicon (#=digit, ?=letter, *=either)
@@ -88,16 +88,69 @@ validate::max(1, 2)						//max allowed value
 ```
 
 ### Transaction Validation ###
+
+Credit card validating.
+
 ```php
-validate::cvv('123');					//credit card cvv
-validate::billname('Dan Hollenbeck');	//name on account
-validate::creditcard('');				//uses luhn alogrithm
-validate::creditcard('', 'VISA')		//uses luhn alogrithm and issuer detection
-validate::dollars('123.00');			//dollar amount
-validate::cents('12300');				//cents amount
-validate::check('1234567-575757')		//checking account number
+//credit cards
+$cc = '4242 4242 4242 4242';
+validate::billname('Dan Hollenbeck');			//name on account
+validate::creditcard($cc, 'visa, mastercard') 	//uses luhn alogrithm and accepted issuers (card types)
+validate::expires('2014-12');					//expiration year and month
+validate::cvv('123');							//credit card cvv
 ```
 
+Electronic check validating.
+```php
+//bank check
+validate::billname('Dan Hollenbeck');	//name on account
+validate::check('1234567-575757')		//if single input containing both routing and account numbers
+validate::bank_routing('0123456789')	//if seperate routing input
+validate::bank_account('0123456789012') //if seperate account input
+```
+
+Transaction amounts validating.
+```php
+//amounts
+validate::dollars('123.00');			//if you transact in dollar amounts
+validate::cents('12300');				//if you transact in cents amount
+```
+
+Misc transactions methods used to make more friendly error messages.
+```php
+//credit card issuer detection
+validate::issuer($cc) 		//returns card type
+validate::mastercard($cc)	//true or false
+validate::visa($cc)
+validate::amex($cc)
+validate::dinners($cc)
+validate::jcb($cc)
+validate::dinners($cc)
+validate::maestro($cc)
+
+//misc
+validate::luhn($cc) 		//luhn algorithm w/o spaces in card numbers
+
+```
+
+## Todo ##
+How do we use issuer detection to restrict transactions to a subset of cards?
+
+option 1:
+ if(
+ 	!validate::mastercard($cc) AND
+ 	!validate::visa($cc) AND
+ 	!validate::amex($cc) AND
+ 	!validate::dinners($cc)
+ 	) throw new Exception('We only accept mastercards, visa, amex and dinners cards.');
+
+option 2:
+ if(!validate::creditcard($cc, array('mastercard', 'visa', 'amex', 'dinners'))
+ 	throw new Exception('We only accept mastercards, visa, amex and dinners cards.');
+
+option 3:
+if(!validate::creditcard($cc, 'mastercard, visa, amex, dinners')
+ 	throw new Exception('We only accept mastercards, visa, amex and dinners cards.');
 
 
 ## Similar Projects ##
