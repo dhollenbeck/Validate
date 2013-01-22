@@ -131,7 +131,8 @@ validate::maestro($cc)
 //misc
 validate::luhn($cc) 		//luhn algorithm w/o spaces in card numbers
 ```
-Example of a NON-VERBOSE credit card transaction validation.
+Example of a user friendly (verbose) validation of a credit card transaction.
+
 ```php
 use \validate as v;
 //inputs
@@ -142,11 +143,27 @@ $cvv = '123';
 $amt = '10.00';
 $acceptedCards = array('visa', 'mastercard', 'amex', 'dinners');
 
-//validations
+//validate billname
+if(!v::required($billname)) throw new Exception('Name on card is required.');
 if(!v::billname($billname)) throw new Exception('Invalid name on card.');
-if(!v::creditcard($cc, $acceptedCards)) throw new Exception('Invalid or non-accepted credit card.');
+
+//validate credit card
+if(!v::required($cc)) throw new Exception('You must enter a credit card.');
+if(!v::luhn($cc)) throw new Exception('The credit card number is invalid.');
+if(!v::creditcard($cc, $acceptedCards)) throw new Exception('Visa, mastercard, amex, dinners cards only.');
+
+//validate expiration
+if(!v::required($expires)) throw new Exception('You must enter an expiration year and month.');
 if(!v::expires($expires)) throw new Exception('Invalid expiration year and month.');
+
+//validate cvv
+if(!v::required($cvv)) throw new Exception('You must enter the code on the back of your card.');
 if(!v::cvv($cvv) throw new Exception('Invalid CVV number.');
+
+//validate amount
+if(!v::required($amt)) throw new Exeption('Missing dollar amount.');
+if(!v::dollar($amt)) throw new Exception('Invalid dollar amount.');
+if(!v::positive($amt)) throw new Exception('Nice try.');
 
 //submit transaction to your payment gateway here
 ```
