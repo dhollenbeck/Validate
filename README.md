@@ -14,8 +14,8 @@ if(!validate::integer($input)) throw new Exception('Input must be an integer!');
 if(!validate::positive($input)) throw new Exception('Input must be positive!');
 
 //or, validate by combination
-if(!validate::is('required, integer, positive', $input)) throw new Exception('Input must be a positive integer!');
-if(!validate::is('required, dollars, positive', $input)) throw new Exception('Input must be a positive dollar amount!');
+if(!validate::is('required, integer, positive', $input)) throw new Exception('Must be positive integer!');
+if(!validate::is('required, dollars, positive', $input)) throw new Exception('Must be positive dollar amount!');
 ```
 ### Address Validation ###
 ```php
@@ -116,7 +116,7 @@ validate::dollars('123.00');			//if you transact in dollar amounts
 validate::cents('12300');				//if you transact in cents amount
 ```
 
-Misc transactions methods used to make more friendly error messages.
+Misc methods that can be used to make more friendly error messages.
 ```php
 //credit card issuer detection
 validate::issuer($cc) 		//returns card type
@@ -130,28 +130,26 @@ validate::maestro($cc)
 
 //misc
 validate::luhn($cc) 		//luhn algorithm w/o spaces in card numbers
-
 ```
+Example of a NON-VERBOSE credit card transaction validation.
+```php
+use \validate as v;
+//inputs
+$billname = 'Dan Hollenbeck';
+$creditcard = '4242 4242 4242 4242';
+$expires = '2014-12';
+$cvv = '123';
+$amt = '10.00';
+$acceptedCards = array('visa', 'mastercard', 'amex', 'dinners');
 
-## Todo ##
-How do we use issuer detection to restrict transactions to a subset of cards?
+//validations
+if(!v::billname($billname)) throw new Exception('Invalid name on card.');
+if(!v::creditcard($cc, $acceptedCards)) throw new Exception('Invalid or non-accepted credit card.');
+if(!v::expires($expires)) throw new Exception('Invalid expiration year and month.');
+if(!v::cvv($cvv) throw new Exception('Invalid CVV number.');
 
-option 1:
- if(
- 	!validate::mastercard($cc) AND
- 	!validate::visa($cc) AND
- 	!validate::amex($cc) AND
- 	!validate::dinners($cc)
- 	) throw new Exception('We only accept mastercards, visa, amex and dinners cards.');
-
-option 2:
- if(!validate::creditcard($cc, array('mastercard', 'visa', 'amex', 'dinners'))
- 	throw new Exception('We only accept mastercards, visa, amex and dinners cards.');
-
-option 3:
-if(!validate::creditcard($cc, 'mastercard, visa, amex, dinners')
- 	throw new Exception('We only accept mastercards, visa, amex and dinners cards.');
-
+//submit transaction to your payment gateway here
+```
 
 ## Similar Projects ##
 https://github.com/Respect/Validation
