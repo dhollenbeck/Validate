@@ -330,7 +330,7 @@ class validate {
 		if(!self::required($str)) return true; //all validations are optional
 		if(!self::nopadding($str)) return false; //no leading or trailing what space is allowed
 
-		$pattern = "^[-a-z' .]{1,}$"; // only hypens, letters, apostrophes, spaces, periods
+		$pattern = "^[a-z]{1}[-a-z' .]+$"; // only hypens, letters, apostrophes, spaces, periods
 		return self::regex($str, $pattern);
 	}
 

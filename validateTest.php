@@ -241,6 +241,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(v::name(' hollenbeck'), 'leading whitespace is not allowed');
 		$this->assertFalse(v::name(' hollenbeck'), 'trailing whitespace is not allowed');
 		$this->assertFalse(v::name("dan\nhollenbeck"), 'do not allow newline in name');
+		$this->assertFalse(v::name("............."), 'must have some letters');
 	}
 
 	public function test_email(){
