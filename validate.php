@@ -359,11 +359,11 @@ class validate {
 		//require greater than 6 characters
 		if(!self::length($str, array('min'=>6, 'max'=>50))) return false;
 
-		//require atleast one case insensitive letter
+		//require at least one case insensitive letter
 		$pattern = '^.*[a-z]+.*$';
 		if(!self::regex($str, $pattern)) return false;
 
-		//require atlest one number
+		//require at least one number
 		$pattern = '^.*[0-9]+.*$';
 		if(!self::regex($str, $pattern)) return false;
 
@@ -384,7 +384,9 @@ class validate {
 		if(!is_string($num)) return false;
 		if(!is_numeric($num)) return false;
 		if($num !== number_format($num, 0, '.', '')) return false;
-		return ((int)$num == $num)? true : false;
+
+		$pattern = '^[-+]?[0-9]+$';
+		return self::regex($num, $pattern);
 	}
 	public static function float($num){
 		if(!self::required($num)) return true;
@@ -520,8 +522,14 @@ class validate {
 		return true;
 	}
 
+	//accept either YYYY-MM or MM/YY
 	public static function expires($expires){
 		if(!self::required($expires)) return true;
+		if(strpos($expires, '/') === 2) {
+			$mon = substr($expires, 0, 2);
+			$year = substr($expires, 3, 2);
+			$expires = "20$year-$mon";
+		}
 		if(!self::date($expires, 'Y-m')) return false;
 		if(!self::after($expires, 'now')) return false;
 		if(!self::before($expires, '+15 years')) return false;

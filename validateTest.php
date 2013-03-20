@@ -310,6 +310,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(v::integer(''), 'not required');
 		$this->assertTrue(v::integer('0'), 'string zero');
 		$this->assertTrue(v::integer('-1'), 'string neg one');
+		$this->assertTrue(v::integer('123'), 'string 123');
 
 		//false
 		$this->assertFalse(v::integer('01'), 'string zero one');
@@ -543,7 +544,8 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	public function test_expires(){
 		//true
 		$this->assertTrue(v::expires(''), 'not required');
-		$this->assertTrue(v::expires('2014-10'), 'basic expiration');
+		$this->assertTrue(v::expires('2016-10'), 'basic YYYY-MM expiration');
+		$this->assertTrue(v::expires('10/16'), 'basic MM/YY expiration');
 
 		//false
 		$this->assertFalse(v::expires('14-10'), 'two digit year');

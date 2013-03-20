@@ -68,7 +68,7 @@ validate::lexicon('Some phrase: 123', 'Some phrase: ###')
 validate::name('Dan Hollenbeck')					//name
 validate::email('dan@hollenbecks.com')				//email
 validate::username('my secret username 123')		//username
-validate::password('134#$$#ABC')					//password strength
+validate::password('134x$$>aBC')					//password strength
 validate::phone('512-555-1234', '###-###-####')		//phone with strick format
 validate::phone('(512) 555-5555', '(###) ###-####') //phone with strick format
 ```
