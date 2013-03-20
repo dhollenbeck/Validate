@@ -334,6 +334,10 @@ class validate {
 		return self::regex($str, $pattern);
 	}
 
+	public static function billname($str){
+		return self::name($str);
+	}
+
 	public static function email($str){
 		if(!is_string($str)) return false;
 		if(!self::required($str)) return true; //all validations are optional
