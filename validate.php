@@ -34,6 +34,7 @@ SOFTWARE.
 ***********************************/
 
 //echo validate::integer('01')? 'true' : 'false';
+//echo validate::float(0.0)? 'true' : 'false';
 
 class validate {
 
@@ -396,9 +397,10 @@ class validate {
 		$pattern = '^[-+]?[0-9]+$';
 		return self::regex($num, $pattern);
 	}
+
 	public static function float($num){
 		if(!self::required($num)) return true;
-		if(!is_string($num)) return false;
+		if(is_float($num)) return true;
 		$pattern = '^[-+]?[0-9]+\.?[0-9]+$';
 		return self::regex($num, $pattern);
 	}

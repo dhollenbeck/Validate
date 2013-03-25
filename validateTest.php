@@ -333,10 +333,10 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(v::float('0.0'), 'zero float string');
 		$this->assertTrue(v::float('+1.1'), 'pos float string');
 		$this->assertTrue(v::float('-1.1'), 'neg float string');
+		$this->assertTrue(v::float(0.1), 'non-zero float');
+		$this->assertTrue(v::float(0.0), 'zero float');
 
 		//false
-		$this->assertFalse(v::float(0.1), 'non-zero float');
-		$this->assertFalse(v::float(0.0), 'zero float');
 		$this->assertFalse(v::float('abc'), 'letters');
 		$this->assertFalse(v::float(0), 'int zero');
 		$this->assertFalse(v::float(1), 'int one');
