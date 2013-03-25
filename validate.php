@@ -33,6 +33,7 @@ SOFTWARE.
 
 ***********************************/
 
+//echo validate::integer('01')? 'true' : 'false';
 
 class validate {
 
@@ -385,10 +386,13 @@ class validate {
 	*****************/
 	public static function integer($num){
 		if(!self::required($num)) return true;
-		if(!is_string($num)) return false;
 		if(!is_numeric($num)) return false;
-		if($num !== number_format($num, 0, '.', '')) return false;
-
+		$nf = number_format($num, 0, '.', '');
+		if(is_string($num)){
+			if($num !== $nf) return false;
+		} else {
+			if($num != $nf) return false;
+		}
 		$pattern = '^[-+]?[0-9]+$';
 		return self::regex($num, $pattern);
 	}

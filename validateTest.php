@@ -313,14 +313,16 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(v::integer('-1'), 'string neg one');
 		$this->assertTrue(v::integer('123'), 'string 123');
 
+		$this->assertTrue(v::integer(0), 'int zero');
+		$this->assertTrue(v::integer(1), 'int one');
+		$this->assertTrue(v::integer(-1), 'int neg one');
+
 		//false
 		$this->assertFalse(v::integer('01'), 'string zero one');
 		$this->assertFalse(v::integer('abc'), 'letters');
 		$this->assertFalse(v::integer(0.1), 'float');
 		$this->assertFalse(v::integer('1.1'), 'float string');
-		$this->assertFalse(v::integer(0), 'int zero');
-		$this->assertFalse(v::integer(1), 'int one');
-		$this->assertFalse(v::integer(-1), 'int neg one');
+
 	}
 
 	public function test_float(){
