@@ -629,6 +629,9 @@ class validate {
 	 * Issuer of credit card.
 	 * @link http://en.wikipedia.org/wiki/Bank_card_number
 	 * @link http://www.pixelenvision.com/2314/php-credit-card-validation-class-using-mod-10-luhn-more/
+	 *
+	 * @todo Move away from regex in favor of using CC INN rules: http://stackoverflow.com/a/15499262/2620505
+	 * @todo Rename 'DINNERS' to 'DINERS'.
 	 */
 	public static function issuer($cc){
 		if(self::mastercard($cc)) return 'MASTERCARD';
