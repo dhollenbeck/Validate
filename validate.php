@@ -658,7 +658,8 @@ class validate {
 	}
 
 	public static function discover($cc){
-		return (preg_match('/^6011[0-9]{12}$/', $cc))? true : false;
+		//return (preg_match('/^6011[0-9]{12}$/', $cc))? true : false;
+		return (preg_match('/^6(?:011|5[0-9]{2})[0-9]{12}$/', $cc))? true : false;
 	}
 
 	public static function jcb($cc){
