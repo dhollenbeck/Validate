@@ -18,7 +18,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 
 
 	public function test_version(){
-		$this->assertEquals(v::version(), '1.0.0', 'test version');
+		$this->assertEquals(v::version(), '1.1.0', 'test version');
 	}
 
 	public function test_required(){
