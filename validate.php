@@ -664,6 +664,8 @@ class validate {
 
 	public static function mastercard($cc){
 
+		$cc = str_replace(' ', '', $cc);
+
 		//length of 16
 		if(!self::length($cc, 16)) return false;
 
@@ -673,6 +675,8 @@ class validate {
 	}
 
 	public static function visa($cc){
+
+		$cc = str_replace(' ', '', $cc);
 
 		//length of 16
 		if(!self::length($cc, 16)) return false;
@@ -684,6 +688,8 @@ class validate {
 
 	public static function amex($cc){
 
+		$cc = str_replace(' ', '', $cc);
+
 		//length of 16
 		if(!self::length($cc, 15)) return false;
 
@@ -693,6 +699,8 @@ class validate {
 	}
 
 	public static function diners($cc){
+
+		$cc = str_replace(' ', '', $cc);
 
 		//length of 14
 		if(!self::length($cc, 14)) return false;
@@ -706,6 +714,8 @@ class validate {
 	}
 
 	public static function discover($cc){
+
+		$cc = str_replace(' ', '', $cc);
 
 		//length of 16
 		if(!self::length($cc, 16)) return false;
@@ -721,6 +731,8 @@ class validate {
 
 	public static function jcb($cc){
 
+		$cc = str_replace(' ', '', $cc);
+
 		//length of 16
 		if(!self::length($cc, 16)) return false;
 
@@ -730,6 +742,8 @@ class validate {
 	}
 
 	public static function maestro($cc){
+
+		$cc = str_replace(' ', '', $cc);
 
 		//length of 12, 13, 14, 15, 16, 17, 18, 19
 		if(!self::length($cc, array('min' =>12, 'max' =>19))) return false;
