@@ -254,6 +254,21 @@ class validate {
 	/*****************
 	  String related
 	*****************/
+
+	public static function beginsWith($haystack, $needle){
+		if(!self::required($haystack)) return true;
+
+		if(is_array($needle)){
+			$needles = $needle;
+			foreach ($needles as $needle) {
+				if(self::beginsWith($haystack, $needle)) return true;
+			}
+			return false;
+		} else {
+			return strpos($haystack, $needle) === 0;
+		}
+	}
+
 	public static function length($str, $opts){
 		if(!self::required($str)) return true;
 		if(!is_string($str)) return false;
@@ -630,14 +645,17 @@ class validate {
 	 * @link http://en.wikipedia.org/wiki/Bank_card_number
 	 * @link http://www.pixelenvision.com/2314/php-credit-card-validation-class-using-mod-10-luhn-more/
 	 *
-	 * @todo Move away from regex in favor of using CC INN rules: http://stackoverflow.com/a/15499262/2620505
-	 * @todo Rename 'DINNERS' to 'DINERS'.
+	 * @see Using CC INN rules: http://stackoverflow.com/a/15499262/2620505
+	 * @see Using CC INN rules: https://github.com/zendframework/zf2/blob/master/library/Zend/Validator/CreditCard.php
+	 * @see Issuer identification number http://www.iinbase.com/
+	 * @see Bank identification number http://www.bincodes.com/
+	 *
 	 */
 	public static function issuer($cc){
 		if(self::mastercard($cc)) return 'MASTERCARD';
 		if(self::visa($cc)) return 'VISA';
 		if(self::amex($cc)) return 'AMEX';
-		if(self::dinners($cc)) return 'DINNERS';
+		if(self::diners($cc)) return 'DINERS';
 		if(self::discover($cc)) return 'DISCOVER';
 		if(self::jcb($cc)) return 'JCB';
 		if(self::maestro($cc)) return 'MAESTRO';
@@ -645,32 +663,80 @@ class validate {
 	}
 
 	public static function mastercard($cc){
-		return (preg_match('/^5[1-5][0-9]{14}$/', $cc))? true : false;
+
+		//length of 16
+		if(!self::length($cc, 16)) return false;
+
+		//check Issuer identification number
+		$inns = array('51', '52', '53', '54', '55');
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
 	public static function visa($cc){
-		return (preg_match('/^4[0-9]{12}([0-9]{3})?$/', $cc))? true : false;
+
+		//length of 16
+		if(!self::length($cc, 16)) return false;
+
+		//check Issuer identification number
+		$inns = array('4');
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
 	public static function amex($cc){
-		return (preg_match('/^3[47][0-9]{13}$/', $cc))? true : false;
+
+		//length of 16
+		if(!self::length($cc, 15)) return false;
+
+		//check Issuer identification number
+		$inns = array('34', '37');
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
-	public static function dinners($cc){
-		return (preg_match('/^3(0[0-5]|[68][0-9])[0-9]{11}$/', $cc))? true : false;
+	public static function diners($cc){
+
+		//length of 14
+		if(!self::length($cc, 14)) return false;
+
+		//check Issuer identification number
+		$inns = array(
+			'300', '301', '302', '303', '304', '305', '36', //https://github.com/zendframework/zf2/blob/master/library/Zend/Validator/CreditCard.php
+			'38' //http://www.getcreditcardnumbers.com/credit-card-generator
+			);
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
 	public static function discover($cc){
-		//return (preg_match('/^6011[0-9]{12}$/', $cc))? true : false;
-		return (preg_match('/^6(?:011|5[0-9]{2})[0-9]{12}$/', $cc))? true : false;
+
+		//length of 16
+		if(!self::length($cc, 16)) return false;
+
+		//check Issuer identification number
+		$inns = array(
+			'6011','622126','622127','622128','622129','62213','62214','62215','62216','62217',
+			'62218','62219','6222','6223','6224','6225','6226',	'6227','6228','62290', '62291',
+			'622920', '622921', '622922', '622923','622924', '622925', '644', '645', '646',
+			'647', '648','649', '65');
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
 	public static function jcb($cc){
-		return (preg_match('/^(3[0-9]{4}|2131|1800)[0-9]{11}$/', $cc))? true : false;
+
+		//length of 16
+		if(!self::length($cc, 16)) return false;
+
+		//check Issuer identification number
+		$inns = array('3528', '3529', '353', '354', '355', '356', '357', '358');
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
 	public static function maestro($cc){
-		return (preg_match('/^(5[06-8]|6)[0-9]{10,17}$/', $cc))? true : false;
+
+		//length of 12, 13, 14, 15, 16, 17, 18, 19
+		if(!self::length($cc, array('min' =>12, 'max' =>19))) return false;
+
+		//check Issuer identification number
+		$inns = array('5018', '5020', '5038', '6304', '6759', '6761', '6762', '6763', '6764', '6765', '6766');
+        return (self::beginsWith($cc, $inns))? true : false;
 	}
 
 	/**

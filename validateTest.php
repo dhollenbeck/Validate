@@ -1,6 +1,11 @@
 <?php
 /*
- Command to run unit tests: 'phpunit filename.php'
+
+To install phpunit on mac MAMP:
+http://www.startupcto.com/server-tech/macosx/installing-phpunit-on-mamp
+
+To run:
+ /Applications/Mamp/bin/php/php5.4.10/bin/phpunit validateTest.php
 */
 
 require_once './validate.php';
@@ -145,6 +150,22 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		//false
 		$this->assertFalse(v::in('TXX', array('TX')), 'not in array');
 		$this->assertFalse(v::in('TX', 0), 'haystack not array');
+	}
+
+	public function test_beginsWith(){
+
+		//true
+		$this->assertTrue(v::beginsWith('abc', 'a'), 'abc starts with a');
+		$this->assertTrue(v::beginsWith('abc', 'abc'), 'abc starts with abc');
+
+		//false
+		$this->assertFalse(v::beginsWith('abc', false), 'abc does not start with false');
+		$this->assertFalse(v::beginsWith('abc', null), 'abc does not start with null');
+		$this->assertFalse(v::beginsWith('abc', 'z'), 'abc does not start with z');
+		$this->assertFalse(v::beginsWith('abc', ' a'), "'abc' does not start with ' a'");
+		$this->assertFalse(v::beginsWith('abc', 'abcd'), "'abc' does not start with 'abcd'");
+		$this->assertFalse(v::beginsWith(123, 123), " numeric 123 does not start with numeric 123");
+
 	}
 
 	public function test_length(){
@@ -621,11 +642,69 @@ class validationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_issuer(){
-		//true
-		//$this->assertTrue(v::issuer(''), 'not required');
+
+		//true amex
+		$this->assertTrue((v::issuer('378282246310005')==='AMEX'), 'valid amex card');
+		$this->assertTrue((v::issuer('371449635398431')==='AMEX'), 'valid amex card');
+		$this->assertTrue((v::issuer('378734493671000')==='AMEX'), 'valid amex corp card');
+
+		//true diners club
+		$this->assertTrue((v::issuer('300___________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('301___________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('302___________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('303___________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('304___________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('305___________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('36____________')==='DINERS'), 'valid diners club card');
+		$this->assertTrue((v::issuer('38____________')==='DINERS'), 'valid diners club card');
+
+		//discover
+		$this->assertTrue((v::issuer('6011____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622126__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622127__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622128__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622129__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62213___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62214___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62215___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62216___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62217___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62218___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62219___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6222____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6223____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6224____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6225____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6226____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6227____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('6228____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62290___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('62291___________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622920__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622921__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622922__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622923__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622924__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('622925__________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('644_____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('645_____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('646_____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('647_____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('648_____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('649_____________')==='DISCOVER'), 'valid diners club card');
+		$this->assertTrue((v::issuer('65______________')==='DISCOVER'), 'valid diners club card');
 
 		//false
 	}
+
+	/*
+	public function test_amx(){
+		//true
+		$this->assertTrue(v::amex('378282246310005'), 'valid amex card');
+
+		//false
+	}
+	*/
 
 	public function test_luhn(){
 		//true
