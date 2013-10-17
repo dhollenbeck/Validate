@@ -697,15 +697,6 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		//false
 	}
 
-	/*
-	public function test_amx(){
-		//true
-		$this->assertTrue(v::amex('378282246310005'), 'valid amex card');
-
-		//false
-	}
-	*/
-
 	public function test_luhn(){
 		//true
 		$this->assertTrue(v::luhn(''), 'not required');
