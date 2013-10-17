@@ -38,7 +38,7 @@ SOFTWARE.
 
 class validate {
 
-	private static $version = '1.0.0';
+	private static $version = '1.1.0';
 
 	public static $states = array(
 		'AL' => 'Alabama',
