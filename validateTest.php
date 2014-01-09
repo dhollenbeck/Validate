@@ -221,6 +221,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 
 		//false
 		$this->assertFalse(v::text("1\4th"), 'backward slash');
+		$this->assertFalse(v::text("&"), 'ampersand');
 	}
 
 	public function test_alpha(){
