@@ -69,6 +69,17 @@ validate::beginsWith($haystack, $needle)
 //no padding
 validate::nopadding(' Some string with leading or trailing whitespace ')
 ```
+### Network ###
+```php
+//url
+validate::url('https://www.google.com')
+validate::url('https://localhost:4343')
+
+//ip4
+validate::ip4('127.0.0.1')
+
+```
+
 
 ### Person/Account Validation ###
 ```php

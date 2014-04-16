@@ -18,7 +18,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 
 
 	public function test_version(){
-		$this->assertEquals(v::version(), '1.1.0', 'test version');
+		$this->assertEquals(v::version(), '1.1.1', 'test version');
 	}
 
 	public function test_required(){
@@ -705,6 +705,29 @@ class validationTest extends PHPUnit_Framework_TestCase {
 
 		//false
 		$this->assertFalse(v::luhn('4242424242424243'), 'invalid luhn');
+	}
+
+	public function test_url(){
+		//true
+		$this->assertTrue(v::url(''), 'not required');
+		$this->assertTrue(v::url('http://www.google.com'), 'valid url');
+		$this->assertTrue(v::url('https://www.google.com'), 'valid url');
+		$this->assertTrue(v::url('https://localhost:4343'), 'valid url');
+
+		//false
+		$this->assertFalse(v::url('http:www.google.com'), 'invalid url');
+		$this->assertFalse(v::url('www.google.com'), 'valid url');
+		$this->assertFalse(v::url('google.com'), 'valid url');
+		$this->assertFalse(v::url('http://example.com/"><script>alert(document.cookie)</script>'), 'invalid xss url');
+	}
+
+	public function test_ip4(){
+		//true
+		$this->assertTrue(v::ip4(''), 'not required');
+		$this->assertTrue(v::ip4('127.0.0.1'), 'valid localhost ip4');
+
+		//false
+		$this->assertFalse(v::ip4('256.255.255.255'), 'invalid ip4');
 	}
 }
 ?>

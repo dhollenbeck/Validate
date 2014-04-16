@@ -38,7 +38,7 @@ SOFTWARE.
 
 class validate {
 
-	private static $version = '1.1.0';
+	private static $version = '1.1.1';
 
 	public static $states = array(
 		'AL' => 'Alabama',
@@ -249,6 +249,26 @@ class validate {
 		if(!self::required($needle)) return true;
 		if(!is_array($haystack)) return false;
 		return in_array($needle, $haystack);
+	}
+
+	/*****************
+	  Network related
+	*****************/
+	public static function url($url){
+		if(!self::required($url)) return true;
+
+		//detect and reject '<script>'
+		//todo: generalize this to if(self::contains($haystack, $needle))
+		if(strpos($url, '<script>') !== false) return false;
+
+		return (filter_var($url, FILTER_VALIDATE_URL))? true : false;
+	}
+
+	public static function ip4($ip){
+		if(!self::required($ip)) return true;
+
+		$pattern = '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+		return self::regex($ip, $pattern);
 	}
 
 	/*****************
