@@ -69,7 +69,7 @@ validate::beginsWith($haystack, $needle)
 //no padding
 validate::nopadding(' Some string with leading or trailing whitespace ')
 ```
-### Network ###
+### Network Validation###
 ```php
 //url
 validate::url('https://www.google.com')
