@@ -61,6 +61,13 @@ validate::text('some string')								//text input like a comment
 //lexicon (#=digit, ?=letter, *=either)
 validate::lexicon('Some phrase: 123', 'Some phrase: ###')
 
+//begins with
+$haystack = array(); //array or string
+$needle = 'needle';
+validate::beginsWith($haystack, $needle)
+
+//no padding
+validate::nopadding(' Some string with leading or trailing whitespace ')
 ```
 
 ### Person/Account Validation ###
