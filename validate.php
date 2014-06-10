@@ -1,7 +1,7 @@
 <?php
 /*
 
-Copyright (c) 2013 Dan Hollenbeck
+Copyright (c) 2014 Dan Hollenbeck
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
@@ -38,7 +38,7 @@ SOFTWARE.
 
 class validate {
 
-	private static $version = '1.1.1';
+	private static $version = '1.1.2';
 
 	public static $states = array(
 		'AL' => 'Alabama',
@@ -420,6 +420,18 @@ class validate {
 	/****************
 	  numeric related
 	*****************/
+
+	public static function zero($num){
+		if(!self::required($num)) return true;
+
+		if(static::float($num) AND static::equal($num, 0.00)) return true;
+		if(static::integer($num) AND static::equal($num, 0)) return true;
+
+		//$pattern = '^[-+]?[0]+\.?[0]+$';
+		$pattern = '^[-+]?[0]{1,}\.?[0]{0,}$';
+		return self::regex($num, $pattern);
+	}
+
 	public static function integer($num){
 		if(!self::required($num)) return true;
 		if(!is_numeric($num)) return false;

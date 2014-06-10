@@ -5,8 +5,10 @@ To install phpunit on mac MAMP:
 http://www.startupcto.com/server-tech/macosx/installing-phpunit-on-mamp
 
 To run:
- /Applications/Mamp/bin/php/php5.4.10/bin/phpunit validateTest.php
+ phpunit tests
 */
+
+date_default_timezone_set('UTC');
 
 require_once './validate.php';
 use validate as v;
@@ -18,7 +20,7 @@ class validationTest extends PHPUnit_Framework_TestCase {
 
 
 	public function test_version(){
-		$this->assertEquals(v::version(), '1.1.1', 'test version');
+		$this->assertEquals(v::version(), '1.1.2', 'test version');
 	}
 
 	public function test_required(){
@@ -379,6 +381,27 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(v::positive('-1'), 'str neg int one');
 		$this->assertFalse(v::positive('-1.0'), 'str neg flt one');
 		$this->assertFalse(v::positive('abc'), 'str letters');
+	}
+
+	public function test_zero(){
+
+		//true
+		$this->assertTrue(v::zero(''), 'not required');
+		$this->assertTrue(v::zero('0'), 'str int zero');
+		$this->assertTrue(v::zero('0.0'), 'str flt zero');
+		$this->assertTrue(v::zero('0.00'), 'str flt zero zero');
+		$this->assertTrue(v::zero('+0.00'), 'str flt plus zero');
+		$this->assertTrue(v::zero('-0.00'), 'str flt neg zero');
+		$this->assertTrue(v::zero(0), 'int zero');
+		$this->assertTrue(v::zero(0.0), 'flt zero');
+
+		//false
+		$this->assertFalse(v::zero('1'), 'str int one');
+		$this->assertFalse(v::zero('-1'), 'str neg int one');
+		$this->assertFalse(v::zero('-1.0'), 'str neg flt one');
+		$this->assertFalse(v::zero('abc'), 'str letters');
+		$this->assertFalse(v::zero(1.0), 'float one');
+		$this->assertFalse(v::zero(1), 'int one');
 	}
 
 	public function test_negative(){
