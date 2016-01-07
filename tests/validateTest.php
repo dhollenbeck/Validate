@@ -589,16 +589,29 @@ class validationTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(v::cvv('abcd'), 'letters');
 		$this->assertFalse(v::cvv('....'), 'periods');
 	}
+
 	public function test_expires(){
 		//true
 		$this->assertTrue(v::expires(''), 'not required');
-		$this->assertTrue(v::expires('2016-10'), 'basic YYYY-MM expiration');
-		$this->assertTrue(v::expires('10/16'), 'basic MM/YY expiration');
+		$this->assertTrue(v::expires('2018-01'), 'basic YYYY-MM expiration');
+		$this->assertTrue(v::expires('01/18'), 'basic MM/YY expiration');
 
 		//false
 		$this->assertFalse(v::expires('14-10'), 'two digit year');
 		$this->assertFalse(v::expires('2014'), 'four digit year only');
 	}
+
+	public function test_expires_current_month(){
+
+		//setup
+		$today1 = date('Y-m');
+		$today2 = date('m/y');
+
+		//true
+		$this->assertTrue(v::expires($today1), 'current month YYYY-MM expiration');
+		$this->assertTrue(v::expires($today2), 'current month MM/YY expiration');
+	}
+
 	public function test_dollars(){
 		//true
 		$this->assertTrue(v::dollars(''), 'not required');

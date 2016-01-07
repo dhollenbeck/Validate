@@ -38,7 +38,7 @@ SOFTWARE.
 
 class validate {
 
-	private static $version = '1.1.2';
+	private static $version = '1.1.3';
 
 	public static $states = array(
 		'AL' => 'Alabama',
@@ -587,9 +587,22 @@ class validate {
 			$year = substr($expires, 3, 2);
 			$expires = "20$year-$mon";
 		}
+
+		$month_current = date('Y-m');
+		$last_ = date("Y-m-t", strtotime($now));
+
+		// YYYY-MM can be converted to a date
 		if(!self::date($expires, 'Y-m')) return false;
-		if(!self::after($expires, 'now')) return false;
+
+		// YYYY-MM is before 15 years from now
 		if(!self::before($expires, '+15 years')) return false;
+
+		// expiring this month is ok
+		if (date('Y-m') === $expires) return true;
+
+		// expiring before now is not ok
+		if(!self::after($expires, 'now')) return false;
+
 		return true;
 	}
 
