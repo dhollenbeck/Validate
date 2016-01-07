@@ -588,8 +588,8 @@ class validate {
 			$expires = "20$year-$mon";
 		}
 
-		$month_current = date('Y-m');
-		$last_ = date("Y-m-t", strtotime($now));
+		//$month_current = date('Y-m');
+		//$last_ = date("Y-m-t", strtotime($now));
 
 		// YYYY-MM can be converted to a date
 		if(!self::date($expires, 'Y-m')) return false;
